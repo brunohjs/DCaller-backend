@@ -1,0 +1,58 @@
+const DatabaseController = require('../models/DatabaseModel');
+
+class DemandControllers {
+    async getCartridges() {
+        return DatabaseController.Cartridge.find({}, {
+            "_id": 0
+        }, (err, response) => {
+            return response;
+        })
+    }
+
+    async getQueue(queue) {
+        let filter = {};
+        switch (queue) {
+            case 'historic':
+                filter = { $or: [{ status: "cancelado"}, { status: "finalizado"}] };
+                break;
+            case 'requested':
+                filter = { status: 'aguardando' };
+                break;
+            case 'producing':
+                filter = { status: 'produzindo' };
+                break;
+            default:
+                filter = {};
+                break;
+        }
+        return await DatabaseController.Item.find(filter, (err, response) => {
+            return response;
+        }).select({
+            "__v": false
+        });
+    }
+
+    async addItem(data) {
+        try {
+            data.status = "aguardando";
+            data.createTime = new Date();
+            data.endTime = Date(data.endTime);
+            const item = await new DatabaseController.Item(data);
+            await item.save();
+            return await this.getQueue();
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async changeStatus(itemId, status) {
+        const data = await DatabaseController.Item.updateOne({
+            "_id": itemId
+        }, {
+            status
+        });
+        return await this.getQueue();
+    };
+}
+
+module.exports = new DemandControllers();

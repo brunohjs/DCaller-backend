@@ -1,0 +1,20 @@
+{
+  "name": "dcaller-backend",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "http-status-codes": "^1.4.0",
+    "mongodb": "3.5.9",
+    "mongoose": "5.9.20"
+  },
+  "scripts": {
+    "start": "node backend/app.js",
+    "dev": "nodemon backend/app.js"
+  }
+}
