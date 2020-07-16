@@ -7,7 +7,8 @@ class DatabaseModel {
             const url = `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_CLUSTER}.net/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
             await mongoose.connect(url, {
                 useNewUrlParser: true,
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
+                useFindAndModify: false
             })
         }
         this.connect();
