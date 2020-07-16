@@ -1,6 +1,6 @@
 const express = require('express');
 const httpStatus = require('http-status-codes');
-const { sendResponse, log } = require('./helpers/utils');
+const { sendResponse, logs } = require('./helpers/utils');
 const router = express.Router();
 
 const DemandControllers = require('./controllers/DemandControllers');
@@ -28,20 +28,20 @@ router.post('/queue', async (req, res) => {
 router.put('/queue', async (req, res) => {
     let id = req.query.id;
     let status = req.query.status;
-    log(`Requisição de alteração para o id ${id} para o status ${status}.`, req.method, 'info');
+    logs(`Requisição de alteração para o id ${id} para o status ${status}.`, req.method, 'info');
     if (id && status) {
         let response = await DemandControllers.changeStatus(id, status);
         if (response) {
-            log(`Item ${id} alterado para o status ${status} com sucesso.`, req.method, 'info');
+            logs(`Item ${id} alterado para o status ${status} com sucesso.`, req.method, 'info');
             res.send(sendResponse(httpStatus.OK, response, "Item atualizado com sucesso."))
                 .status(httpStatus.OK);
         } else {
-            log(`Erro no servidor`, req.method, 'error');
+            logs(`Erro no servidor`, req.method, 'error');
             res.send(sendResponse(httpStatus.INTERNAL_SERVER_ERROR, [], "Erro interno no servidor."))
                 .status(httpStatus.INTERNAL_SERVER_ERROR);
         }
     } else {
-        log(`Erro na requisição.`, req.method, 'error');
+        logs(`Erro na requisição.`, req.method, 'error');
         res.send(sendResponse(httpStatus.BAD_REQUEST, [], "Erro na requisição."))
                 .status(httpStatus.BAD_REQUEST);
     }
