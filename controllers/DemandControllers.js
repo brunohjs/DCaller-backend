@@ -46,7 +46,7 @@ class DemandControllers {
     }
 
     async changeStatus(itemId, status) {
-        const data = await DatabaseController.Item.findByIdAndUpdate({ itemId }, { status });
+        const data = await DatabaseController.Item.findByIdAndUpdate({ '_id': itemId }, { status });
         return await this.getQueue();
     };
 }

@@ -7,7 +7,8 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+
+app.use(process.env.ENV == "PRD" ? cors() : cors());
 app.use(express.json());
 app.use('/', routes);
 
