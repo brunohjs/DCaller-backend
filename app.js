@@ -7,8 +7,11 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
+const corsOptions = {
+    origin: 'https://dcaller-frontend.herokuapp.com'
+}
 
-app.use(process.env.ENV == "PRD" ? cors() : cors());
+app.use(process.env.ENV == "PRD" ? cors(corsOptions) : cors());
 app.use(express.json());
 app.use('/', routes);
 
