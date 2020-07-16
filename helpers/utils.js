@@ -13,6 +13,7 @@ module.exports = {
 
     log: (message, method, type) => {
         let time = new Date().toISOString().substring(0, 19);
+        console.log(message, method, type)
         type = constants.logStatus.includes(type) ? constants.logStatus[type].toUpperCase() : 'NONE';
         console.log(`[${type}][${method}][${time}] ${message}`)
     }
