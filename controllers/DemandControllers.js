@@ -36,7 +36,7 @@ class DemandControllers {
         try {
             data.status = "aguardando";
             data.createTime = new Date();
-            data.endTime = Date(data.endTime);
+            data.endTime = new Date(data.endTime);
             const item = await new DatabaseController.Item(data);
             await item.save();
             return await this.getQueue();
