@@ -1,4 +1,5 @@
 const httpStatus = require('http-status-codes');
+const constants = require('./constants');
 
 module.exports = {
     sendResponse: (statusCode, data, message) => {
@@ -8,5 +9,11 @@ module.exports = {
             message: message ? message : httpStatus.getStatusText(statusCode),
             data: data ? data : null
         }
+    },
+
+    log: (message, method, type) => {
+        let time = new Date().toISOString().substring(0, 19);
+        type = constants.logStatus.includes(type) ? constants.logStatus[type] : 'none';
+        console.log(`[${type.toUpperCase()}][${method}][${time}] ${message}`)
     }
 }
