@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const routes = require('./routes'); 
 const cors = require('cors');
-const { logs } = require('./helpers/constants')
+const { logs } = require('./helpers/utils')
 
 const app = express();
 
