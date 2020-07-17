@@ -12,7 +12,7 @@ const corsOptions = {
     origin: 'https://dcaller-frontend.herokuapp.com'
 }
 
-logs(process.env.ENV+ ' ' + process.env.ENV == 'PRD', 'LISTEN', 'info')
+logs(process.env.PRD+ ' ' + process.env.PRD == true, 'LISTEN', 'info')
 
 app.use(process.env.ENV == "PRD" ? cors(corsOptions) : cors());
 app.use(express.json());
