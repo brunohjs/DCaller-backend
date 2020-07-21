@@ -16,6 +16,7 @@ class DatabaseModel {
         this.Item = mongoose.model('Item', new mongoose.Schema({
             name: String,
             customer: String,
+            new: Boolean,
             quantity: Number,
             createTime: Date,
             endTime: Date,
