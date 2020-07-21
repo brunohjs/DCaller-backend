@@ -49,6 +49,10 @@ class DemandControllers {
         const data = await DatabaseController.Item.findOneAndUpdate({ '_id': itemId }, { status });
         return await this.getQueue();
     };
+
+    async dropCollection() {
+        await DatabaseController.Item.remove({});
+    }
 }
 
 module.exports = new DemandControllers();

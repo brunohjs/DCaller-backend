@@ -51,4 +51,9 @@ router.get('/ping', async (req, res) => {
     res.send(sendResponse(httpStatus.OK, {}, "Teste de ping!"))
 });
 
+router.get('/drop', async (req, res) => {
+    await DemandControllers.dropCollection();
+    res.send(sendResponse(httpStatus.OK, {}, "Dados excluídos."))
+})
+
 module.exports = router;
