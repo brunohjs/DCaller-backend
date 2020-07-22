@@ -77,7 +77,6 @@ router.get('/ping', async (req, res) => {
 });
 
 router.get('/drop', async (req, res) => {
-    console.log(req)
     if (checkOrigin(req)) {
         await DemandControllers.dropCollection();
         logs(`Banco limpo...`, req.method, 'info');
