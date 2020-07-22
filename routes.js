@@ -37,7 +37,7 @@ router.put('/queue', async (req, res) => {
     if (req.query.status) {
         data.status = req.query.status;
     }
-    if (id && (data.new || data.status)) {
+    if (id && ([true, false].includes(data.new) || data.status)) {
         logs(`Requisição de alteração para o id ${id}.`, req.method, 'info');
         let response = await DemandControllers.changeItem(id, data);
         if (response) {
