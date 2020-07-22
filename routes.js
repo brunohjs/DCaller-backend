@@ -31,7 +31,6 @@ router.post('/queue', async (req, res) => {
 router.put('/queue', async (req, res) => {
     let id = req.query.id;
     let data = {};
-    console.log(req.query.new, typeof req.query.new);
     if (req.query.new) {
         data.new = ['true', '1'].includes(data.new);
     }
