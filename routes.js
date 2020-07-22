@@ -16,48 +16,58 @@ router.get('/queue', async (req, res) => {
 });
 
 router.post('/queue', async (req, res) => {
-    if (req.body) {
-        let response = await DemandControllers.addItem(req.body);
-        if (response) {
-            logs(`Item (cliente: ${req.body.customer}, cartucho: ${req.body.name}) adicionado com sucesso.`, req.method, 'info');
-            res.send(sendResponse(httpStatus.OK, response, "Item adicionado com sucesso."))
-                .status(httpStatus.OK);
+    if (checkOrigin(req)) {
+        if (req.body) {
+            let response = await DemandControllers.addItem(req.body);
+            if (response) {
+                logs(`Item (cliente: ${req.body.customer}, cartucho: ${req.body.name}) adicionado com sucesso.`, req.method, 'info');
+                res.send(sendResponse(httpStatus.OK, response, "Item adicionado com sucesso."))
+                    .status(httpStatus.OK);
+            } else {
+                res.send(sendResponse(httpStatus.INTERNAL_SERVER_ERROR, [], "Erro interno no servidor."))
+                    .status(httpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else {
-            res.send(sendResponse(httpStatus.INTERNAL_SERVER_ERROR, [], "Erro interno no servidor."))
-                .status(httpStatus.INTERNAL_SERVER_ERROR);
+            logs(`Erro na requisição`, req.method, 'error');
+            res.send(httpStatus.getStatusText(httpStatus.BAD_REQUEST))
+                .status(httpStatus.BAD_REQUEST);
         }
     } else {
-        logs(`Erro na requisição`, req.method, 'error');
-        res.send(httpStatus.getStatusText(httpStatus.BAD_REQUEST))
-            .status(httpStatus.BAD_REQUEST);
+        res.send(sendResponse(httpStatus.UNAUTHORIZED, [], "Acesso negado."))
+            .status(httpStatus.UNAUTHORIZED);
     }
 });
 
 router.put('/queue', async (req, res) => {
     let id = req.query.id;
     let data = {};
-    if (req.query.new) {
-        data.new = ['true', '1'].includes(data.new);
-    }
-    if (req.query.status) {
-        data.status = req.query.status;
-    }
-    if (id && ([true, false].includes(data.new) || data.status)) {
-        logs(`Requisição de alteração para o id ${id}.`, req.method, 'info');
-        let response = await DemandControllers.changeItem(id, data);
-        if (response) {
-            logs(`Item ${id} alterado com sucesso.`, req.method, 'info');
-            res.send(sendResponse(httpStatus.OK, response, "Item atualizado com sucesso."))
-                .status(httpStatus.OK);
+    if (checkOrigin(req)) {
+        if (req.query.new) {
+            data.new = ['true', '1'].includes(data.new);
+        }
+        if (req.query.status) {
+            data.status = req.query.status;
+        }
+        if (id && ([true, false].includes(data.new) || data.status)) {
+            logs(`Requisição de alteração para o id ${id}.`, req.method, 'info');
+            let response = await DemandControllers.changeItem(id, data);
+            if (response) {
+                logs(`Item ${id} alterado com sucesso.`, req.method, 'info');
+                res.send(sendResponse(httpStatus.OK, response, "Item atualizado com sucesso."))
+                    .status(httpStatus.OK);
+            } else {
+                logs(`Erro no servidor`, req.method, 'error');
+                res.send(sendResponse(httpStatus.INTERNAL_SERVER_ERROR, [], "Erro interno no servidor."))
+                    .status(httpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else {
-            logs(`Erro no servidor`, req.method, 'error');
-            res.send(sendResponse(httpStatus.INTERNAL_SERVER_ERROR, [], "Erro interno no servidor."))
-                .status(httpStatus.INTERNAL_SERVER_ERROR);
+            logs(`Erro na requisição.`, req.method, 'error');
+            res.send(sendResponse(httpStatus.BAD_REQUEST, [], "Erro na requisição."))
+                .status(httpStatus.BAD_REQUEST);
         }
     } else {
-        logs(`Erro na requisição.`, req.method, 'error');
-        res.send(sendResponse(httpStatus.BAD_REQUEST, [], "Erro na requisição."))
-            .status(httpStatus.BAD_REQUEST);
+        res.send(sendResponse(httpStatus.UNAUTHORIZED, [], "Acesso negado."))
+            .status(httpStatus.UNAUTHORIZED);
     }
 });
 
@@ -67,9 +77,14 @@ router.get('/ping', async (req, res) => {
 });
 
 router.get('/drop', async (req, res) => {
-    await DemandControllers.dropCollection();
-    logs(`Banco limpo...`, req.method, 'info');
-    res.send(sendResponse(httpStatus.OK, {}, "Dados excluídos."))
+    if (checkOrigin(req)) {
+        await DemandControllers.dropCollection();
+        logs(`Banco limpo...`, req.method, 'info');
+        res.send(sendResponse(httpStatus.OK, {}, "Dados excluídos."))
+    } else {
+        res.send(sendResponse(httpStatus.UNAUTHORIZED, [], "Acesso negado."))
+            .status(httpStatus.UNAUTHORIZED);
+    }
 })
 
 module.exports = router;
