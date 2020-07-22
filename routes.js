@@ -13,6 +13,7 @@ router.post('/queue', async (req, res) => {
     if (req.body) {
         let response = await DemandControllers.addItem(req.body);
         if (response) {
+            logs(`Item (cliente: ${req.body.customer}, cartucho: ${req.body.name}) adicionado com sucesso.`, req.method, 'info');
             res.send(sendResponse(httpStatus.OK, response, "Item adicionado com sucesso."))
                 .status(httpStatus.OK);
         } else {
@@ -20,6 +21,7 @@ router.post('/queue', async (req, res) => {
                 .status(httpStatus.INTERNAL_SERVER_ERROR);
         }
     } else {
+        logs(`Erro na requisição`, req.method, 'error');
         res.send(httpStatus.getStatusText(httpStatus.BAD_REQUEST))
             .status(httpStatus.BAD_REQUEST);
     }
@@ -49,16 +51,18 @@ router.put('/queue', async (req, res) => {
     } else {
         logs(`Erro na requisição.`, req.method, 'error');
         res.send(sendResponse(httpStatus.BAD_REQUEST, [], "Erro na requisição."))
-                .status(httpStatus.BAD_REQUEST);
+            .status(httpStatus.BAD_REQUEST);
     }
 });
 
 router.get('/ping', async (req, res) => {
+    logs(`Ping!`, req.method, 'info');
     res.send(sendResponse(httpStatus.OK, {}, "Teste de ping!"))
 });
 
 router.get('/drop', async (req, res) => {
     await DemandControllers.dropCollection();
+    logs(`Banco limpo...`, req.method, 'info');
     res.send(sendResponse(httpStatus.OK, {}, "Dados excluídos."))
 })
 
