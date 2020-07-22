@@ -41,7 +41,7 @@ router.put('/queue', async (req, res) => {
         logs(`Requisição de alteração para o id ${id}.`, req.method, 'info');
         let response = await DemandControllers.changeItem(id, data);
         if (response) {
-            logs(`Item ${id} alterado para o status ${status} com sucesso.`, req.method, 'info');
+            logs(`Item ${id} alterado com sucesso.`, req.method, 'info');
             res.send(sendResponse(httpStatus.OK, response, "Item atualizado com sucesso."))
                 .status(httpStatus.OK);
         } else {
