@@ -1,3 +1,4 @@
+require('dotenv').config();
 const httpStatus = require('http-status-codes');
 const constants = require('./constants');
 
@@ -15,5 +16,14 @@ module.exports = {
         let time = new Date().toISOString().substring(0, 19);
         type = constants.logStatus.includes(type) ? type.toUpperCase() : 'NONE';
         console.log(`[${type}][${method}][${time}] ${message}`)
+    },
+
+    checkOrigin(req, res) {
+        if (req.get('origin') == process.env.ORIGIN) {
+            return true;
+        } else {
+            res.send(sendResponse(httpStatus.UNAUTHORIZED, [], "Acesso negado."))
+                .status(httpStatus.UNAUTHORIZED);
+        }
     }
 }

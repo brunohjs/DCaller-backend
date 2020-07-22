@@ -1,12 +1,12 @@
 const express = require('express');
 const httpStatus = require('http-status-codes');
-const { sendResponse, logs } = require('./helpers/utils');
+const { sendResponse, logs, checkOrigin } = require('./helpers/utils');
 const router = express.Router();
 
 const DemandControllers = require('./controllers/DemandControllers');
 
 router.get('/queue', async (req, res) => {
-    console.log('>>',  req.get('origin'))
+    checkOrigin();
     logs(`Requisitando todos os itens do banco.`, req.method, 'info');
     res.send(await DemandControllers.getQueue());
 });
