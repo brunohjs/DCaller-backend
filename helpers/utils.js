@@ -18,7 +18,7 @@ module.exports = {
         console.log(`[${type}][${method}][${time}] ${message}`)
     },
 
-    checkOrigin(req, res) {
+    checkOrigin(req) {
         return req.get('origin') == process.env.ORIGIN || process.env.PRD == 'false';
     }
 }
