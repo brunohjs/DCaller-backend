@@ -27,10 +27,16 @@ router.post('/queue', async (req, res) => {
 
 router.put('/queue', async (req, res) => {
     let id = req.query.id;
-    let status = req.query.status;
-    logs(`Requisição de alteração para o id ${id} para o status ${status}.`, req.method, 'info');
-    if (id && status) {
-        let response = await DemandControllers.changeStatus(id, status);
+    let data = {};
+    if (req.query.new) {
+        data.new = ['true', '1'].includes(data.new);
+    }
+    if (req.query.status) {
+        data.status = req.query.status;
+    }
+    if (id && (data.new || data.status)) {
+        logs(`Requisição de alteração para o id ${id}.`, req.method, 'info');
+        let response = await DemandControllers.changeItem(id, data);
         if (response) {
             logs(`Item ${id} alterado para o status ${status} com sucesso.`, req.method, 'info');
             res.send(sendResponse(httpStatus.OK, response, "Item atualizado com sucesso."))
