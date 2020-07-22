@@ -6,9 +6,13 @@ const router = express.Router();
 const DemandControllers = require('./controllers/DemandControllers');
 
 router.get('/queue', async (req, res) => {
-    checkOrigin(req, res);
-    logs(`Requisitando todos os itens do banco.`, req.method, 'info');
-    res.send(await DemandControllers.getQueue());
+    if (checkOrigin(req, res)) {
+        logs(`Requisitando todos os itens do banco.`, req.method, 'info');
+        res.send(await DemandControllers.getQueue());
+    } else {
+        res.send(utils.sendResponse(httpStatus.UNAUTHORIZED, [], "Acesso negado."))
+            .status(httpStatus.UNAUTHORIZED);
+    }
 });
 
 router.post('/queue', async (req, res) => {
