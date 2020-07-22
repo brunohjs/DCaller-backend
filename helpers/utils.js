@@ -2,7 +2,7 @@ require('dotenv').config();
 const httpStatus = require('http-status-codes');
 const constants = require('./constants');
 
-module.exports = {
+utils = {
     sendResponse: (statusCode, data, message) => {
         return {
             statusCode,
@@ -22,8 +22,10 @@ module.exports = {
         if (req.get('origin') == process.env.ORIGIN) {
             return true;
         } else {
-            res.send(sendResponse(httpStatus.UNAUTHORIZED, [], "Acesso negado."))
+            res.send(utils.sendResponse(httpStatus.UNAUTHORIZED, [], "Acesso negado."))
                 .status(httpStatus.UNAUTHORIZED);
         }
     }
 }
+
+module.exports = utils;
