@@ -6,7 +6,7 @@ const router = express.Router();
 const DemandControllers = require('./controllers/DemandControllers');
 
 router.get('/queue', async (req, res) => {
-    console.log('>>', req.get('host'))
+    console.log('>>',  req.get('origin'))
     logs(`Requisitando todos os itens do banco.`, req.method, 'info');
     res.send(await DemandControllers.getQueue());
 });
